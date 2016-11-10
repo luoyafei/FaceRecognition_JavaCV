@@ -27,14 +27,12 @@ public class Main {
 //		MatVector contours = new MatVector();
 		Mat input = img.clone();
 		Mat hierarchy = new Mat();
-		
 //		findContours(input, contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
 		
 		/*if(contours.size() == 0) {
 			return output;
 		}
 		*/
-		System.out.println(contours.size());
 		return null;
 	}
 	
