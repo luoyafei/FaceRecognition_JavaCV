@@ -1,7 +1,6 @@
 package com.facerec.main;
 
 
-import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgproc.COLOR_BGRA2GRAY;
 import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
@@ -34,13 +33,11 @@ public class SampleTraining {
 	
 	private static JFrame jf = new JFrame("样本训练");
 	private static JPanel jp = new JPanel(new GridLayout(1, 2));
-	private static final String parentDir = "F:/javacv_picture/";
+	final private static String parentDir = "F:/javacv_picture/";//处理样本后存放的地址
 	private static volatile SampleTraining st = new SampleTraining();
-	
 	private static volatile ImageFile imageFile = ImageUtil.getImageFile();
-	
-	JTextField nameField = new JTextField("输入样本姓名");
-	JButton entryButton = new JButton("开始录入样本");
+	private JTextField nameField = new JTextField("输入样本姓名");
+	private JButton entryButton = new JButton("开始录入样本");
 	
 	public static SampleTraining newInstance() {
 		if(st == null) {
@@ -57,14 +54,10 @@ public class SampleTraining {
 	private SampleTraining() {
 		jf.setLocation(500, 200);
 		jf.setSize(400, 100);
-		
 		jp.setLayout(new GridLayout(1, 2));
-		
 		jp.add(nameField);
 		jp.add(entryButton);
-		
 		jf.add(jp);
-		
 		jf.setVisible(true);
 		
 		bindEvent4Buttons();
@@ -104,6 +97,12 @@ public class SampleTraining {
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		return chooser;
 	}
+	/**
+	 * 处理图片样本
+	 * @param chooser
+	 * @param name
+	 * @return
+	 */
 	private int dealFile(JFileChooser chooser, String name) {
 		
 		if(chooser.showOpenDialog(jp) == JFileChooser.APPROVE_OPTION) {

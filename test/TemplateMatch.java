@@ -1,4 +1,4 @@
-package com.facerec.util;
+
 
 import static org.bytedeco.javacpp.opencv_core.cvCreateImage;
 import static org.bytedeco.javacpp.opencv_core.cvMinMaxLoc;

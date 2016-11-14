@@ -1,34 +1,21 @@
 package com.facerec.util;
 
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
-
-
-import static org.bytedeco.javacpp.opencv_highgui.*;
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
-import static org.bytedeco.javacpp.opencv_objdetect.*;
-
-import org.bytedeco.javacpp.opencv_core.IplImage;
-import org.bytedeco.javacpp.opencv_face.FaceRecognizer;
-import static org.bytedeco.javacpp.opencv_face.*;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.FrameGrabber;
-import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
-import org.bytedeco.javacv.VideoInputFrameGrabber;
+import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
+import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
+import static org.bytedeco.javacpp.opencv_core.cvGetSeqElem;
+import static org.bytedeco.javacpp.opencv_core.cvLoad;
+import static org.bytedeco.javacpp.opencv_core.cvSetImageROI;
+import static org.bytedeco.javacpp.opencv_imgcodecs.cvSaveImage;
+import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_CANNY_PRUNING;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.opencv_core.CvMemStorage;
 import org.bytedeco.javacpp.opencv_core.CvRect;
-import org.bytedeco.javacpp.opencv_core.CvScalar;
 import org.bytedeco.javacpp.opencv_core.CvSeq;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacpp.opencv_objdetect.CvHaarClassifierCascade;
@@ -45,6 +32,7 @@ public class ImageUtil {
 	private static final CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(cvLoad(XML_FILE));
 	private static final CvMemStorage storage = CvMemStorage.create();
 
+	@SuppressWarnings("resource")
 	public static boolean dealSampleFaceImage(IplImage src, String fileUrl) {
 		
 		IplImage imgTemp = src.clone();
@@ -69,6 +57,7 @@ public class ImageUtil {
 //		System.out.println(cvSaveImage(fileUrl, imgTemp));
 	}
 	
+	@SuppressWarnings("resource")
 	public static void saveFileJson(ImageFile imageFile) {
 		String filesContent = gson.toJson(imageFile);
 		File file = new File("files.json");
