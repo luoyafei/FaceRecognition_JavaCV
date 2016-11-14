@@ -2,49 +2,33 @@ package com.facerec.util;
 
 import java.util.Vector;
 
+import com.google.gson.Gson;
+
 public class ImageFile {
 
 	@Override
 	public String toString() {
-		return "ImageFile [imageFiles=" + imageFiles + "]";
+		return "ImageFile [imagefilesUrl=" + imagefilesUrl + "]";
 	}
-	
-	public Vector<Image> getImageFiles() {
-		return imageFiles;
+	Vector<String> imagefilesUrl = new Vector<>();
+	public Vector<String> getImagefilesUrl() {
+		return imagefilesUrl;
 	}
-	public void setImageFiles(Vector<Image> imageFiles) {
-		this.imageFiles = imageFiles;
+
+	public void setImagefilesUrl(Vector<String> imagefilesUrl) {
+		this.imagefilesUrl = imagefilesUrl;
 	}
-	/**
-	 * 所有人的脸的集合
-	 */
-	private Vector<Image> imageFiles = null;
-	
-	/**
-	 * @param peopleName 对应一个人脸样本的名称
-	 * @param peopleNameItemNames 对应所有该人脸样本的所有图片的地址
-	 * @author Diamond
-	 *
-	 */
-	public static class Image{
-		@Override
-		public String toString() {
-			return "Image [peopleName=" + peopleName + ", peopleNameItemNames=" + peopleNameItemNames + "]";
-		}
-		private String peopleName;
-		private Vector<String> peopleNameItemNames;
-		
-		public String getPeopleName() {
-			return peopleName;
-		}
-		public void setPeopleName(String peopleName) {
-			this.peopleName = peopleName;
-		}
-		public Vector<String> getPeopleNameItemNames() {
-			return peopleNameItemNames;
-		}
-		public void setPeopleNameItemNames(Vector<String> peopleNameItemNames) {
-			this.peopleNameItemNames = peopleNameItemNames;
-		}
+	public static void main(String[] args) {
+		Vector<String> test = new Vector<>();
+		test.add("select");
+		test.add("hellow");
+		test.add("hellod");
+		test.add("hellos");
+		ImageFile imf = new ImageFile();
+		imf.setImagefilesUrl(test);
+		Gson gson = new Gson();
+//		ImageFile ifile = gson.fromJson("{\"imagefilesUrl\":[\"select\",\"hellow\",\"hellod\",\"hellos\"]}", ImageFile.class);
+//		System.out.println(ifile.getImagefilesUrl().toString());
+		System.out.println(gson.toJson(imf));
 	}
 }

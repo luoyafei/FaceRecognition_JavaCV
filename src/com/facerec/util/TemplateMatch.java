@@ -5,6 +5,7 @@ import static org.bytedeco.javacpp.opencv_core.cvMinMaxLoc;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_TM_CCORR_NORMED;
+import static  org.bytedeco.javacpp.opencv_core.cvSetImageROI;
 import static org.bytedeco.javacpp.opencv_imgproc.cvMatchTemplate;
 
 /**
@@ -27,8 +28,6 @@ import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 
-import com.facerec.util.ImageFile.Image;
-
 
 public class TemplateMatch {
 
@@ -38,28 +37,6 @@ public class TemplateMatch {
         matchSample = cvLoadImage(filename);
     }
 
-    /**
-     * 返回匹配的模板名称呼
-     * @param source
-     * @param images
-     * @return
-     */
-    public String matchTemplate(IplImage source, Vector<Image> images) {
-    	
-    	for(int i = 0; i < images.size(); i++) {
-    		String name = images.get(i).getPeopleName();
-    		
-    		System.out.println("名稱：" + name);
-    		
-    		for(String nameUrl : images.get(i).getPeopleNameItemNames()) {
-    			matchSample = cvLoadImage(nameUrl);
-    			if(matchTemplate(source)) {
-    				return name;
-    			}
-    		}
-    	}
-    	return "老王";
-    }
     
     public boolean matchTemplate(IplImage source) {
     	

@@ -2,6 +2,7 @@ package com.facerec.util;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 
+
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
@@ -21,7 +22,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.opencv_core.CvMemStorage;
 import org.bytedeco.javacpp.opencv_core.CvRect;
 import org.bytedeco.javacpp.opencv_core.CvScalar;
@@ -45,7 +49,6 @@ public class ImageUtil {
 		
 		IplImage imgTemp = src.clone();
 		
-		
 		CvSeq sign = cvHaarDetectObjects(src, cascade, storage, 1.2, 2, CV_HAAR_DO_CANNY_PRUNING);
 		cvClearMemStorage(storage);
 		int total_Faces = sign.total();
@@ -55,9 +58,12 @@ public class ImageUtil {
 			CvRect r = new CvRect(cvGetSeqElem(sign, i));
 			/*cvRectangle(src, cvPoint(r.x(), r.y()), cvPoint(r.width() + r.x(), r.height() + r.y()), CvScalar.RED, 2,
 					CV_AA, 0);*/
-			cvSetImageROI(imgTemp, r);
+			CvRect cr = new CvRect(r.x(), r.y(), 200, 200);
+			cvSetImageROI(imgTemp, cr);
 		}
-		
+//		cvSaveImage(arg0, arg1, arg2)
+//		IntPointer ip = new IntPointer(new Point(200, 200));
+//		cvResize(arg0, arg1);
 //		cvWaitKey(0);
 		return cvSaveImage(fileUrl, imgTemp)==1 ? true : false;
 //		System.out.println(cvSaveImage(fileUrl, imgTemp));
@@ -80,9 +86,13 @@ System.out.println(imageFile.toString());
 			file =  gson.fromJson(new FileReader("files.json"), ImageFile.class);
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
 System.out.println("files.json 文件加载失败！没有找到！");
-			file = null;			
+			file = new ImageFile();			
 		} finally {
 			return file;
 		}
+	}
+	public static String getNameInNumber(String nb) {
+		
+		return "老王";
 	}
 }

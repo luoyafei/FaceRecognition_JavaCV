@@ -22,7 +22,7 @@ public class TemplateMatching {
 //        int width = Integer.parseInt(args[3]);
 //        int height = Integer.parseInt(args[4]);
     	String fileUrl_1 = "F:/luoyafei.jpg";
-    	String fileUrl_2 = "F:/luoyafei_5.png";
+    	String fileUrl_2 = "F:/luoluo.jpg";
     	int width = 500;
     	int height = 500;
 
@@ -36,19 +36,23 @@ public class TemplateMatching {
         // Match Template Function from OpenCV
         cvMatchTemplate(src, tmp, result, CV_TM_CCORR_NORMED);
 
-//         double[] min_val = new double[2];
-//         double[] max_val = new double[2];
-        DoublePointer min_val = new DoublePointer();
-        DoublePointer max_val = new DoublePointer();
+         double[] min_val = new double[2];
+         double[] max_val = new double[2];
+        /*DoublePointer min_val_d = new DoublePointer();
+        DoublePointer max_val_d = new DoublePointer();*/
+         DoublePointer min_val_d = new DoublePointer(min_val);
+         DoublePointer max_val_d = new DoublePointer(max_val);
 
         CvPoint minLoc = new CvPoint();
         CvPoint maxLoc = new CvPoint();
         
-        cvMinMaxLoc(result, min_val, max_val, minLoc, maxLoc, null);
-
+        /*cvMinMaxLoc(result, min_val, max_val, minLoc, maxLoc, null);*/
+        cvMinMaxLoc(result, min_val_d, max_val_d, minLoc, maxLoc, null);
+        
+        
         // Get the Max or Min Correlation Value
 //         System.out.println(min_val);
-//         System.out.println(max_val);
+         System.out.println(max_val_d.get());
 
         CvPoint point = new CvPoint();
         point.x(maxLoc.x() + tmp.width());

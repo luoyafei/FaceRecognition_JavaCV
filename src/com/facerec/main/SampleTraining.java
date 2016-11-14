@@ -2,6 +2,11 @@ package com.facerec.main;
 
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
+import static org.bytedeco.javacpp.opencv_imgproc.COLOR_BGRA2GRAY;
+import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
+import static org.bytedeco.javacpp.opencv_imgproc.equalizeHist;
+import static org.bytedeco.javacpp.opencv_imgproc.resize;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,9 +24,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacpp.opencv_core.Mat;
+import org.bytedeco.javacpp.opencv_core.Size;
 
 import com.facerec.util.ImageFile;
-import com.facerec.util.ImageFile.Image;
 import com.facerec.util.ImageUtil;
 
 public class SampleTraining {
@@ -102,42 +108,38 @@ public class SampleTraining {
 		
 		if(chooser.showOpenDialog(jp) == JFileChooser.APPROVE_OPTION) {
 			
-			Vector<Image> face_files = null;
-			if(imageFile == null)
-				imageFile = new ImageFile();
-			
-			if(imageFile.getImageFiles() == null)
-				face_files = new Vector<>();
-			
-			else
-				face_files = imageFile.getImageFiles();
-			
-			Image face = new Image();
-			face.setPeopleName(name);
-			Vector<String> faceUrls = new Vector<>();
-			
+			Vector<String> faceUrls = ImageUtil.getImageFile().getImagefilesUrl();
+			if(faceUrls == null)
+				faceUrls = new Vector<>();
 			
 			File[] files = chooser.getSelectedFiles();
-			String parentDir_names = parentDir + name;
-			new File(parentDir_names).mkdirs();
+//			String parentDir_names = parentDir + name;
+//			new File(parentDir_names).mkdirs();
 			
 			for(int i = faceUrls.size(), j = 0; i < files.length + faceUrls.size() && j < files.length; i++,j++) {
-				String fileUrl = parentDir_names + "/" + name + "_" + i + ".jpg";
+				String fileUrl = parentDir + name + "_" + i + ".jpg";
 //				System.out.println(fileUrl);
 //				System.out.println(files[i].getAbsolutePath().replaceAll("[\\\\]", "/"));
 				String srcUrl = files[j].getAbsolutePath().replaceAll("[\\\\]", "/").trim();
-				IplImage src = cvLoadImage(srcUrl);
+				
+				Mat mat = imread(srcUrl);
+				Mat resizeMat = new Mat();
+				Mat realMat = new Mat();
+				resize(mat, resizeMat, new Size(720, 1280));
+	            cvtColor(resizeMat, realMat, COLOR_BGRA2GRAY);
+	            equalizeHist(realMat, realMat);
+//				imshow("", resizeMat);
+//				waitKey(0);
+//				detectFace(new IplImage(resizeMat));		
+				IplImage src = new IplImage(realMat);
 				if(ImageUtil.dealSampleFaceImage(src, fileUrl)) {
 					faceUrls.add(fileUrl);
 				}
 			}
 System.out.println("录入样本数：" + files.length + ",成功个数：" + faceUrls.size());
 
-			face.setPeopleNameItemNames(faceUrls);
 			
-			face_files.add(face);
-			
-			imageFile.setImageFiles(face_files);
+			imageFile.setImagefilesUrl(faceUrls);
 			
 			ImageUtil.saveFileJson(imageFile);
 			

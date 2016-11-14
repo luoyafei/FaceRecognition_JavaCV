@@ -1,7 +1,10 @@
 
 import java.io.File;
+import java.io.FilenameFilter;
 
+import org.bytedeco.javacpp.opencv_core.MatVector;
 import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameGrabber;
@@ -21,25 +24,39 @@ public class FaceRecognizerInVideo {
 
     public static void main(String[] args) throws Exception {
 
+    	
         OpenCVFrameConverter.ToMat converterToMat = new OpenCVFrameConverter.ToMat();
 
-        if (args.length < 2) {
+        /*if (args.length < 2) {
             System.out.println("Two parameters are required to run this program, first parameter is the analized video and second parameter is the trained result for fisher faces.");
-        }
+        }*/
 
-        String videoFileName = args[0];
-        String trainedResult = args[1];
+//        String videoFileName = "F:/luoyafei.mp4";//args[0];
+//        String trainedResult = "F:/luoyafei.jpg";//args[1];
+        String trainingDir = "F:/facereg";
 
-        CascadeClassifier face_cascade = new CascadeClassifier(
-                "data\\haarcascade_frontalface_default.xml");
+        CascadeClassifier face_cascade = new CascadeClassifier("D:/OpenCV/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml");
         FaceRecognizer lbphFaceRecognizer = createLBPHFaceRecognizer();
-        lbphFaceRecognizer.load(trainedResult);
+//        lbphFaceRecognizer.load(trainedResult);
+        
+        File root = new File(trainingDir);
+        FilenameFilter imgFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                name = name.toLowerCase();
+                return name.endsWith(".jpg") || name.endsWith(".pgm") || name.endsWith(".png");
+            }
+        };
+        File[] imageFiles = root.listFiles(imgFilter);
+        MatVector images = new MatVector(imageFiles.length);
+        
 
-        File f = new File(videoFileName);
+        
+        
+//        File f = new File(videoFileName);
 
         OpenCVFrameGrabber grabber = null;
         try {
-            grabber = OpenCVFrameGrabber.createDefault(f);
+            grabber = OpenCVFrameGrabber.createDefault(0);
             grabber.start();
         } catch (Exception e) {
             System.err.println("Failed start the grabber.");
